@@ -1,0 +1,28 @@
+# Example .bitbucket/codeowners.yml
+#
+# Copy this to `.bitbucket/codeowners.yml` on a repository's target branch, then enable
+# "Code Owners Merge Check" under Repository settings -> Merge checks.
+#
+# Monorepo with senior gates: a junior approving a frontend/backend change does NOT unblock the
+# merge — only a member of the corresponding *-seniors group does.
+
+version: 1
+
+groups:
+  frontend-seniors:
+    users: [alice, bob]
+  backend-seniors:
+    users: [carol, dave]
+
+rules:
+  - paths: ["frontend/**", "**/*.tsx", "**/*.ts", "**/*.css"]
+    owners: ["@frontend-seniors"]
+    minApprovals: 1
+
+  - paths: ["services/**", "**/*.java", "**/*.kt"]
+    owners: ["@backend-seniors"]
+    minApprovals: 1
+
+options:
+  autoAddReviewers: true
+  unmatchedPolicy: allow

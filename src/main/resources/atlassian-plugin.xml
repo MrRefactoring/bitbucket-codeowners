@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+        <param name="atlassian-data-center-status">compatible</param>
+        <param name="atlassian-data-center-compatible">true</param>
+    </plugin-info>
+
+    <!-- i18n strings -->
+    <resource type="i18n" name="i18n" location="codeowners"/>
+
+    <!-- Merge check. class="bean:..." resolves the Spring bean named "codeOwnersMergeCheck",
+         created by @Named("codeOwnersMergeCheck") on the implementation. configurable="false"
+         means there is no per-repo settings form; behaviour is driven by .bitbucket/codeowners.yml.
+         The check is enabled per repository/project under Settings -> Merge checks. -->
+    <repository-merge-check key="codeOwnersMergeCheck"
+                            name="Code Owners Merge Check"
+                            class="bean:codeOwnersMergeCheck"
+                            configurable="false">
+        <description key="codeowners.mergecheck.description"/>
+    </repository-merge-check>
+</atlassian-plugin>

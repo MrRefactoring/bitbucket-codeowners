@@ -1,0 +1,39 @@
+name: Release
+
+# Cutting a release: bump <version> in pom.xml, then push a matching tag:
+#   git tag v0.1.0 && git push origin v0.1.0
+# This builds the plugin and attaches target/*.jar to the GitHub Release so
+# devops can download a ready-to-install artifact.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & publish artifact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build plugin
+        run: mvn -B -ntp clean package
+
+      - name: List build output
+        run: ls -la target/*.jar
+
+      - name: Create release and attach artifact
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/*.jar
+          generate_release_notes: true
+          fail_on_unmatched_files: true
