@@ -70,6 +70,11 @@ public class CodeOwnersMergeCheck implements RepositoryMergeCheck {
 
         List<String> violations = new ArrayList<>();
         for (Requirement requirement : requirements) {
+            if (requirement.getMinApprovals() == 0) {
+                // Advisory rule: its owners are suggested as reviewers, but it never blocks the
+                // merge (not even when the owners cannot be resolved).
+                continue;
+            }
             if (!requirement.isResolvable()) {
                 violations.add("Owners for \"" + requirement.getMatchedPath() + "\" could not be resolved ("
                         + requirement.getOwnersLabel()

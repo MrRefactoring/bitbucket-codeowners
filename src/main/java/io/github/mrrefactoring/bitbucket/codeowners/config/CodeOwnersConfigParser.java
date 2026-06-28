@@ -97,8 +97,9 @@ public final class CodeOwnersConfigParser {
                 throw new CodeOwnersConfigException("rules[" + index + "] requires a non-empty 'owners' list.");
             }
             int minApprovals = toInt(rule.get("minApprovals"), 1);
-            if (minApprovals < 1) {
-                throw new CodeOwnersConfigException("rules[" + index + "] 'minApprovals' must be >= 1.");
+            if (minApprovals < 0) {
+                throw new CodeOwnersConfigException("rules[" + index + "] 'minApprovals' must be >= 0 "
+                        + "(0 means advisory: owners are suggested as reviewers but do not block the merge).");
             }
             rules.add(new OwnershipRule(paths, owners, minApprovals));
         }

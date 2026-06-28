@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-06-28
+
+### Added
+- **Advisory rules** (`minApprovals: 0`): a rule's owners are auto-added as reviewers but the rule
+  never blocks the merge (not even when its owners cannot be resolved). Lets a mandatory rule and a
+  non-mandatory rule coexist on the same paths without redundant veto messages.
+
 ## [0.1.0] - 2026-06-28
 
 Initial release.
@@ -27,5 +34,6 @@ Initial release.
 - GitHub Actions: CI build/test on every push & PR; a `v*` tag builds the plugin and attaches the
   `.jar` to the GitHub Release.
 
-[Unreleased]: https://github.com/MrRefactoring/bitbucket-codeowners/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/MrRefactoring/bitbucket-codeowners/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/MrRefactoring/bitbucket-codeowners/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/MrRefactoring/bitbucket-codeowners/releases/tag/v0.1.0

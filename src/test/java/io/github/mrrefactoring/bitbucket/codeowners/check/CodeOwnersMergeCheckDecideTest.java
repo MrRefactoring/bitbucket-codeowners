@@ -20,6 +20,10 @@ public class CodeOwnersMergeCheckDecideTest {
                 new HashSet<>(Arrays.asList(owners)), minApprovals, resolvable);
     }
 
+    private static Requirement rule(String path, String label, int minApprovals, boolean resolvable, String... owners) {
+        return new Requirement(path, label, new HashSet<>(Arrays.asList(owners)), minApprovals, resolvable);
+    }
+
     private static Set<String> approved(String... users) {
         return new HashSet<>(Arrays.asList(users));
     }
@@ -78,5 +82,33 @@ public class CodeOwnersMergeCheckDecideTest {
                 EvaluationResult.of(Collections.singletonList(r), true), Collections.<String>emptySet());
         assertFalse(d.isAccepted());
         assertTrue(d.getDetails().contains("could not be resolved"));
+    }
+
+    @Test
+    public void advisoryRuleNeverBlocks() {
+        Requirement advisory = rule("frontend/x.tsx", "@frontend-all", 0, true, "alice", "carol");
+        CheckDecision d = CodeOwnersMergeCheck.decide(
+                EvaluationResult.of(Collections.singletonList(advisory), true), Collections.<String>emptySet());
+        assertTrue(d.isAccepted());
+    }
+
+    @Test
+    public void advisoryRuleWithUnresolvableOwnersNeverBlocks() {
+        Requirement advisory = rule("frontend/x.tsx", "@frontend-all", 0, false);
+        CheckDecision d = CodeOwnersMergeCheck.decide(
+                EvaluationResult.of(Collections.singletonList(advisory), true), Collections.<String>emptySet());
+        assertTrue(d.isAccepted());
+    }
+
+    @Test
+    public void mandatoryBlocksWhileAdvisoryOnSamePathStaysSilent() {
+        Requirement mandatory = rule("frontend/x.tsx", "@frontend-seniors", 1, true, "alice", "bob");
+        Requirement advisory = rule("frontend/x.tsx", "@frontend-all", 0, true, "alice", "bob", "carol");
+        CheckDecision d = CodeOwnersMergeCheck.decide(
+                EvaluationResult.of(Arrays.asList(mandatory, advisory), true), Collections.<String>emptySet());
+        assertFalse(d.isAccepted());
+        assertTrue(d.getDetails().contains("@frontend-seniors"));
+        // the advisory rule on the same path contributes no veto line
+        assertFalse(d.getDetails().contains("@frontend-all"));
     }
 }

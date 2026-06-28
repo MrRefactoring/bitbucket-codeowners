@@ -63,6 +63,19 @@ public class CodeOwnersConfigParserTest {
         CodeOwnersConfigParser.parse("rules:\n  - paths: ['*.java']\n");
     }
 
+    @Test
+    public void allowsAdvisoryMinApprovalsZero() {
+        CodeOwnersConfig config = CodeOwnersConfigParser.parse(
+                "rules:\n  - paths: ['frontend/**']\n    owners: ['@frontend-all']\n    minApprovals: 0\n");
+        assertEquals(0, config.getRules().get(0).getMinApprovals());
+    }
+
+    @Test(expected = CodeOwnersConfigException.class)
+    public void rejectsNegativeMinApprovals() {
+        CodeOwnersConfigParser.parse(
+                "rules:\n  - paths: ['*.x']\n    owners: ['@a']\n    minApprovals: -1\n");
+    }
+
     @Test(expected = CodeOwnersConfigException.class)
     public void rejectsInvalidYaml() {
         CodeOwnersConfigParser.parse("rules: [a, b");

@@ -11,13 +11,21 @@ version: 1
 groups:
   frontend-seniors:
     users: [alice, bob]
+  frontend-all:
+    users: [alice, bob, carol, dave]
   backend-seniors:
-    users: [carol, dave]
+    users: [erin, frank]
 
 rules:
   - paths: ["frontend/**", "**/*.tsx", "**/*.ts", "**/*.css"]
     owners: ["@frontend-seniors"]
     minApprovals: 1
+
+  # Advisory rule on the SAME paths: the whole frontend team is added as reviewers,
+  # but their approval is not required (minApprovals: 0 never blocks the merge).
+  - paths: ["frontend/**", "**/*.tsx", "**/*.ts", "**/*.css"]
+    owners: ["@frontend-all"]
+    minApprovals: 0
 
   - paths: ["services/**", "**/*.java", "**/*.kt"]
     owners: ["@backend-seniors"]

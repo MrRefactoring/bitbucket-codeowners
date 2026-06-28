@@ -88,7 +88,7 @@ A list, evaluated against the paths changed by the pull request.
 |----------------|----------|---------|------------------------------------------------------------------------------------------|
 | `paths`        | **yes**  | —       | Non-empty list of glob patterns. The rule matches a PR if **any** changed path matches **any** of its globs. See [Glob semantics](#glob-semantics). |
 | `owners`       | **yes**  | —       | Non-empty list of owner references. See [Owner reference forms](#owner-reference-forms). |
-| `minApprovals` | no       | `1`     | Approvals required **from this rule's owners**. Must be `>= 1`.                           |
+| `minApprovals` | no       | `1`     | Approvals required **from this rule's owners**. Must be `>= 0`. `0` makes the rule **advisory** — see [Advisory rules](#advisory-non-mandatory-reviewers). |
 
 Rules are independent and additive: **every** rule whose globs match at least one changed path
 contributes a requirement, and **all** contributed requirements must be satisfied before the merge
@@ -97,6 +97,30 @@ is allowed.
 **Why subgroups matter.** To require "at least one senior", make the rule's owner group contain
 **only seniors** and set `minApprovals: 1`. A junior's approval does not count, because the junior
 is not a member of the senior group.
+
+#### Advisory (non-mandatory) reviewers
+
+Set `minApprovals: 0` to make a rule **advisory**: its owners are still auto-added as reviewers
+(when `autoAddReviewers` is on), but the rule **never blocks the merge** — not even if its owners
+cannot be resolved. This models "mandatory and non-mandatory reviewers on the same paths": pair a
+mandatory rule (the seniors, `minApprovals: 1`) with an advisory rule (everyone else, `minApprovals: 0`).
+
+```yaml
+groups:
+  frontend-seniors: { users: [alice, bob] }
+  frontend-all:     { users: [alice, bob, carol, dave] }
+rules:
+  - paths: ["frontend/**"]
+    owners: ["@frontend-seniors"]
+    minApprovals: 1          # mandatory: at least one senior must approve
+  - paths: ["frontend/**"]   # same paths
+    owners: ["@frontend-all"]
+    minApprovals: 0          # advisory: added as reviewers, never blocks
+```
+
+On a `frontend/**` change, `alice`, `bob`, `carol` and `dave` are all added as reviewers, but only
+a **senior** approval clears the gate. The advisory rule contributes **no veto line** — avoiding the
+redundant message you would get from a second *mandatory* rule on the same path.
 
 ### `options`
 
@@ -157,7 +181,7 @@ The check is **fail-closed** on misconfiguration so problems are visible, not si
 | File present, valid, a requirement unmet    | Merge **blocked** with a per-rule message listing what's missing.   |
 | File empty / not a mapping / no `rules`     | Merge **blocked** — `Invalid code owners configuration` + reason.   |
 | YAML syntax error                           | Merge **blocked** — `Invalid code owners configuration` + reason.   |
-| Owners unresolvable (e.g. unknown `@group`) | Merge **blocked** — "owners could not be resolved" for that rule.   |
+| Owners unresolvable (e.g. unknown `@group`) | Merge **blocked** — "owners could not be resolved" for that rule (mandatory rules only; an advisory `minApprovals: 0` rule never blocks). |
 
 ## Full example: monorepo with senior gates
 
