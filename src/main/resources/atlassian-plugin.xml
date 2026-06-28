@@ -12,7 +12,7 @@
     <resource type="i18n" name="i18n" location="codeowners"/>
 
     <!-- Merge check. class="bean:..." resolves the Spring bean named "codeOwnersMergeCheck",
-         created by @Named("codeOwnersMergeCheck") on the implementation. configurable="false"
+         created by @Component("codeOwnersMergeCheck") on the implementation. configurable="false"
          means there is no per-repo settings form; behaviour is driven by .bitbucket/codeowners.yml.
          The check is enabled per repository/project under Settings -> Merge checks. -->
     <repository-merge-check key="codeOwnersMergeCheck"

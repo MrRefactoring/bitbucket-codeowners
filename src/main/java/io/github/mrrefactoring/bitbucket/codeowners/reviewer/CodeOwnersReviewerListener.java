@@ -11,10 +11,10 @@ import io.github.mrrefactoring.bitbucket.codeowners.eval.CodeOwnersEvaluator;
 import io.github.mrrefactoring.bitbucket.codeowners.eval.EvaluationResult;
 import io.github.mrrefactoring.bitbucket.codeowners.match.Requirement;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +25,13 @@ import java.util.Set;
 /**
  * Adds the matched code owners as reviewers when a pull request is opened (when
  * {@code options.autoAddReviewers} is enabled). Best-effort: failures never block PR creation.
+ *
+ * <p>Uses Spring's {@link InitializingBean}/{@link DisposableBean} (rather than the
+ * {@code @PostConstruct}/{@code @PreDestroy} annotations) so the same source compiles on both
+ * Bitbucket 9.x (javax.annotation) and 10.x (jakarta.annotation).
  */
-@Named
-public class CodeOwnersReviewerListener {
+@Component
+public class CodeOwnersReviewerListener implements InitializingBean, DisposableBean {
 
     private static final Logger log = LoggerFactory.getLogger(CodeOwnersReviewerListener.class);
 
@@ -35,7 +39,7 @@ public class CodeOwnersReviewerListener {
     private final PullRequestService pullRequestService;
     private final CodeOwnersEvaluator evaluator;
 
-    @Inject
+    @Autowired
     public CodeOwnersReviewerListener(@ComponentImport EventPublisher eventPublisher,
                                       @ComponentImport PullRequestService pullRequestService,
                                       CodeOwnersEvaluator evaluator) {
@@ -44,13 +48,13 @@ public class CodeOwnersReviewerListener {
         this.evaluator = evaluator;
     }
 
-    @PostConstruct
-    public void register() {
+    @Override
+    public void afterPropertiesSet() {
         eventPublisher.register(this);
     }
 
-    @PreDestroy
-    public void unregister() {
+    @Override
+    public void destroy() {
         eventPublisher.unregister(this);
     }
 

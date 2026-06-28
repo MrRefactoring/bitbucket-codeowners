@@ -31,13 +31,13 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
 
-        <!-- Authoritative versions for Bitbucket DC 10.3.x (from platform-deps 8.3.18) -->
+        <!-- Default target: Bitbucket DC 10.3.x (versions from platform-deps 8.3.18).
+             The `bb9` profile below overrides these to build for Bitbucket 9.3 (Java 17). -->
         <bitbucket.version>10.3.1</bitbucket.version>
         <amps.version>9.12.5</amps.version>
         <atlassian.spring.scanner.version>6.0.2</atlassian.spring.scanner.version>
-        <jakarta.inject.version>2.0.1</jakarta.inject.version>
-        <jakarta.annotation.version>2.1.1</jakarta.annotation.version>
         <atlassian.event.version>6.0.6</atlassian.event.version>
+        <spring.version>6.2.18</spring.version>
         <slf4j.version>2.0.17</slf4j.version>
         <snakeyaml.version>2.2</snakeyaml.version>
 
@@ -71,7 +71,9 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- DI: spring-scanner 6.x uses jakarta.inject / jakarta.annotation -->
+        <!-- DI via spring-scanner + Spring stereotypes. Using org.springframework.* annotations
+             (not javax/jakarta.inject) keeps a single source compilable on both Bitbucket 9.x
+             (Spring 5 / javax) and 10.x (Spring 6 / jakarta). Spring is provided by the host. -->
         <dependency>
             <groupId>com.atlassian.plugin</groupId>
             <artifactId>atlassian-spring-scanner-annotation</artifactId>
@@ -79,15 +81,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>jakarta.inject</groupId>
-            <artifactId>jakarta.inject-api</artifactId>
-            <version>${jakarta.inject.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
-            <version>${jakarta.annotation.version}</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -187,4 +183,25 @@
             <snapshots><enabled>false</enabled></snapshots>
         </pluginRepository>
     </pluginRepositories>
+
+    <profiles>
+        <!--
+          LTS compatibility build for Bitbucket DC 9.3 (Java 17).
+          Activate with: mvn -Pbb9 clean package
+          Versions are aligned to Bitbucket 9.3's platform (platform-deps 7.1.6). The default
+          (no profile) build targets Bitbucket 10.3 / Java 21.
+        -->
+        <profile>
+            <id>bb9</id>
+            <properties>
+                <bitbucket.version>9.3.0</bitbucket.version>
+                <atlassian.spring.scanner.version>5.1.0</atlassian.spring.scanner.version>
+                <atlassian.event.version>6.0.0</atlassian.event.version>
+                <spring.version>5.3.39-atlassian-2</spring.version>
+                <slf4j.version>2.0.16</slf4j.version>
+                <maven.compiler.source>17</maven.compiler.source>
+                <maven.compiler.target>17</maven.compiler.target>
+            </properties>
+        </profile>
+    </profiles>
 </project>

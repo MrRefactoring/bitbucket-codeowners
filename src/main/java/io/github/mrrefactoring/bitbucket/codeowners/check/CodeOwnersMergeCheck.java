@@ -13,8 +13,8 @@ import io.github.mrrefactoring.bitbucket.codeowners.eval.CodeOwnersEvaluator;
 import io.github.mrrefactoring.bitbucket.codeowners.eval.EvaluationResult;
 import io.github.mrrefactoring.bitbucket.codeowners.match.Requirement;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,7 +29,7 @@ import java.util.Set;
  * <p>Registered as {@code <repository-merge-check class="bean:codeOwnersMergeCheck"/>}; enabled
  * per repository/project under Settings &rarr; Merge checks.
  */
-@Named("codeOwnersMergeCheck")
+@Component("codeOwnersMergeCheck")
 public class CodeOwnersMergeCheck implements RepositoryMergeCheck {
 
     static final String VETO_SUMMARY = "Code owner approval required";
@@ -37,7 +37,7 @@ public class CodeOwnersMergeCheck implements RepositoryMergeCheck {
 
     private final CodeOwnersEvaluator evaluator;
 
-    @Inject
+    @Autowired
     public CodeOwnersMergeCheck(CodeOwnersEvaluator evaluator) {
         this.evaluator = evaluator;
     }

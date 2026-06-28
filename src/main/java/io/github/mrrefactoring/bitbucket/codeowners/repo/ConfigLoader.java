@@ -5,22 +5,22 @@ import com.atlassian.bitbucket.content.NoSuchPathException;
 import com.atlassian.bitbucket.repository.Repository;
 import com.atlassian.plugin.spring.scanner.annotation.imports.ComponentImport;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 /** Reads the raw {@code .bitbucket/codeowners.yml} content from a repository at a given commit. */
-@Named
+@Component
 public class ConfigLoader {
 
     public static final String CONFIG_PATH = ".bitbucket/codeowners.yml";
 
     private final ContentService contentService;
 
-    @Inject
+    @Autowired
     public ConfigLoader(@ComponentImport ContentService contentService) {
         this.contentService = contentService;
     }

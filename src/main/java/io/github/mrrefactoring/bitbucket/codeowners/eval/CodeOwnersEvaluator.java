@@ -15,8 +15,8 @@ import io.github.mrrefactoring.bitbucket.codeowners.match.RuleResolver;
 import io.github.mrrefactoring.bitbucket.codeowners.repo.ConfigLoader;
 import io.github.mrrefactoring.bitbucket.codeowners.user.GroupMemberResolver;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -27,7 +27,7 @@ import java.util.Set;
  * resolves the resulting approval requirements. Used by both the merge check and the reviewer
  * listener so the two stay consistent.
  */
-@Named
+@Component
 public class CodeOwnersEvaluator {
 
     /** Safety cap on changed paths inspected, to bound work on very large pull requests. */
@@ -37,7 +37,7 @@ public class CodeOwnersEvaluator {
     private final PullRequestService pullRequestService;
     private final GroupMemberResolver groupMemberResolver = new GroupMemberResolver();
 
-    @Inject
+    @Autowired
     public CodeOwnersEvaluator(ConfigLoader configLoader,
                                @ComponentImport PullRequestService pullRequestService) {
         this.configLoader = configLoader;
