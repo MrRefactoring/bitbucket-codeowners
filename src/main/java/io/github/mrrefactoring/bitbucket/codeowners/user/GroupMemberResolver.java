@@ -9,7 +9,7 @@ import java.util.Set;
  * <p>v1 intentionally returns no members. Enumerating Bitbucket group membership depends on a host
  * API that must be verified per deployment, so the reliable path is to model the critical (e.g.
  * "seniors") subgroup with an explicit user list under {@code groups:} in
- * {@code .bitbucket/codeowners.yml}. An unresolved {@code @@group} reference therefore makes its
+ * {@code codeowners.yml}. An unresolved {@code @@group} reference therefore makes its
  * rule fail-closed with a clear message rather than silently passing.
  *
  * <p>This is the single extension point for adding real Bitbucket-group resolution later.

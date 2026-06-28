@@ -33,7 +33,7 @@ import java.util.Set;
 public class CodeOwnersMergeCheck implements RepositoryMergeCheck {
 
     static final String VETO_SUMMARY = "Code owner approval required";
-    static final String INVALID_SUMMARY = "Invalid .bitbucket/codeowners.yml";
+    static final String INVALID_SUMMARY = "Invalid code owners configuration";
 
     private final CodeOwnersEvaluator evaluator;
 
@@ -73,7 +73,7 @@ public class CodeOwnersMergeCheck implements RepositoryMergeCheck {
             if (!requirement.isResolvable()) {
                 violations.add("Owners for \"" + requirement.getMatchedPath() + "\" could not be resolved ("
                         + requirement.getOwnersLabel()
-                        + "). Define the group's users explicitly in .bitbucket/codeowners.yml.");
+                        + "). Define the group's users explicitly in codeowners.yml.");
                 continue;
             }
             int have = ApprovalCounter.countApprovals(requirement, approvedUsernames);

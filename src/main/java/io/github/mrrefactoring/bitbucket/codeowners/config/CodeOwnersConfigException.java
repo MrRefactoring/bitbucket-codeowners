@@ -1,7 +1,7 @@
 package io.github.mrrefactoring.bitbucket.codeowners.config;
 
 /**
- * Thrown when {@code .bitbucket/codeowners.yml} is present but cannot be parsed into a valid
+ * Thrown when the code owners config file is present but cannot be parsed into a valid
  * configuration. The message is surfaced to the user in the merge-check veto so the
  * misconfiguration is visible and fixable.
  */

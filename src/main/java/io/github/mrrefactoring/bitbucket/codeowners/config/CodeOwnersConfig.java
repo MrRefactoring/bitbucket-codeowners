@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/** Parsed representation of {@code .bitbucket/codeowners.yml}. */
+/** Parsed representation of the {@code codeowners.yml}/{@code codeowners.yaml} config. */
 public final class CodeOwnersConfig {
 
     private final Map<String, List<String>> groups;

@@ -11,7 +11,8 @@ All notable changes to this project are documented here. The format is based on
   required number of approvals from each matched owner group is reached.
 - Subgroup approval thresholds (`minApprovals`) so a "≥1 senior" gate can be expressed where a
   junior's approval does not count.
-- Config-as-code in `.bitbucket/codeowners.yml`, read from the pull request's target branch.
+- Config-as-code in `codeowners.yml` / `codeowners.yaml` at the **repository root**, read from the
+  pull request's target branch (first matching name wins).
 - Optional auto-add of matched owners as reviewers when a pull request is opened.
 - GitHub Actions: CI build/test on every push & PR; tagged releases (`v*`) attach the built
   `.jar` to the GitHub Release.

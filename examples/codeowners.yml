@@ -1,7 +1,7 @@
-# Example .bitbucket/codeowners.yml
+# Example codeowners.yml
 #
-# Copy this to `.bitbucket/codeowners.yml` on a repository's target branch, then enable
-# "Code Owners Merge Check" under Repository settings -> Merge checks.
+# Copy this to the REPOSITORY ROOT as `codeowners.yml` (or `codeowners.yaml`) on the target
+# branch, then enable "Code Owners Merge Check" under Repository settings -> Merge checks.
 #
 # Monorepo with senior gates: a junior approving a frontend/backend change does NOT unblock the
 # merge — only a member of the corresponding *-seniors group does.

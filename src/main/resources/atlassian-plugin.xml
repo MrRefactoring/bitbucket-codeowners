@@ -13,7 +13,7 @@
 
     <!-- Merge check. class="bean:..." resolves the Spring bean named "codeOwnersMergeCheck",
          created by @Component("codeOwnersMergeCheck") on the implementation. configurable="false"
-         means there is no per-repo settings form; behaviour is driven by .bitbucket/codeowners.yml.
+         means there is no per-repo settings form; behaviour is driven by codeowners.yml (repo root).
          The check is enabled per repository/project under Settings -> Merge checks. -->
     <repository-merge-check key="codeOwnersMergeCheck"
                             name="Code Owners Merge Check"

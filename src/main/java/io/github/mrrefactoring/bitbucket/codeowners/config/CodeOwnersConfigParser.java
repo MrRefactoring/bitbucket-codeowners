@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Parses {@code .bitbucket/codeowners.yml} into a {@link CodeOwnersConfig}.
+ * Parses the {@code codeowners.yml}/{@code codeowners.yaml} content into a {@link CodeOwnersConfig}.
  *
  * <p>Parsing is defensive and map-based (no YAML-to-bean binding) so that hostile or malformed
  * input results in a {@link CodeOwnersConfigException} with a clear message rather than an

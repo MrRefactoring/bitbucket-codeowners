@@ -19,7 +19,7 @@ backend owners, and — critically — **at least one *senior*** sign-off for ce
 junior's approval must **not** satisfy the gate. That is expressed directly here:
 
 ```yaml
-# .bitbucket/codeowners.yml
+# codeowners.yml — at the repository root
 version: 1
 groups:
   frontend-seniors: { users: [alice, bob] }
@@ -43,7 +43,7 @@ A junior approving a `*.tsx` change does not unblock the merge — only a member
 
 | Concern              | Mechanism                                                                 |
 |----------------------|---------------------------------------------------------------------------|
-| Configuration        | `.bitbucket/codeowners.yml`, read from the PR **target branch** (config-as-code) |
+| Configuration        | `codeowners.yml` / `codeowners.yaml` at the **repo root**, read from the PR **target branch** (config-as-code) |
 | Enforcement          | `RepositoryMergeCheck` SPI — vetoes the merge with an explanatory message  |
 | Reviewer suggestion  | Listener on `PullRequestOpenedEvent` adds matched owners as reviewers      |
 | Scope / isolation    | Enabled **per repository/project** under *Merge checks*                    |
@@ -55,9 +55,14 @@ Download the `.jar` from [Releases](https://github.com/MrRefactoring/bitbucket-c
 and upload it via **Administration → Manage apps → Upload app**. Full steps, requirements, and
 the native-Code-Owners notes are in [docs/deployment.md](./docs/deployment.md).
 
-Requirements: **Bitbucket DC 10.x** (built against 10.3.1), **Java 21**.
+Requirements: **Bitbucket DC 10.x** (built against 10.3.1), **Java 21**. A **Bitbucket 9.x LTS**
+build (Java 17) is also produced — see [docs/deployment.md](./docs/deployment.md).
 
 ## Configuration
+
+Put a `codeowners.yml` (or `codeowners.yaml`) at the **root of the repository**, on the branch you
+merge into. It is read from each PR's **target branch**, so the rules that gate a merge can't be
+weakened by the same PR.
 
 See [docs/configuration.md](./docs/configuration.md) for the full schema, glob semantics, and
 owner-reference forms.
