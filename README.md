@@ -20,7 +20,6 @@ junior's approval must **not** satisfy the gate. That is expressed directly here
 
 ```yaml
 # codeowners.yml — at the repository root
-version: 1
 groups:
   frontend-seniors: { users: [alice, bob] }
   backend-seniors:  { users: [carol, dave] }

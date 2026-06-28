@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Removed
+- Dropped the no-op `version` field from the configuration schema docs and examples. The parser
+  never read it; existing files that still include it keep working (unknown top-level keys are
+  ignored).
+
 ## [0.1.1] - 2026-06-28
 
 ### Added

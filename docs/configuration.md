@@ -27,8 +27,6 @@ If no config file exists on the target branch, the check does nothing and the me
 
 ```yaml
 # codeowners.yml — at the repository root
-version: 1
-
 groups:
   frontend-seniors: { users: [alice, bob] }
   backend-seniors:  { users: [carol, dave] }
@@ -55,7 +53,6 @@ A junior approving a `*.tsx` change does **not** unblock the merge — only a me
 
 | Key       | Required | Type    | Notes                                                                 |
 |-----------|----------|---------|-----------------------------------------------------------------------|
-| `version` | no       | integer | Forward-compatibility marker. Currently not validated; keep `1`.      |
 | `groups`  | no       | mapping | Named owner groups. See [`groups`](#groups).                          |
 | `rules`   | **yes**  | list    | At least one rule is required. See [`rules`](#rules).                 |
 | `options` | no       | mapping | Behavioural options. See [`options`](#options).                      |
@@ -186,8 +183,6 @@ The check is **fail-closed** on misconfiguration so problems are visible, not si
 ## Full example: monorepo with senior gates
 
 ```yaml
-version: 1
-
 groups:
   frontend-seniors: { users: [alice, bob] }
   backend-seniors:  { users: [carol, dave] }
