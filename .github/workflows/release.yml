@@ -2,8 +2,10 @@ name: Release
 
 # Cutting a release: bump <version> in pom.xml, then push a matching tag:
 #   git tag v0.1.0 && git push origin v0.1.0
-# This builds the plugin and attaches target/*.jar to the GitHub Release so
-# devops can download a ready-to-install artifact.
+# This builds BOTH artifacts and attaches them to the GitHub Release so devops
+# can download a ready-to-install jar for either platform line:
+#   - bitbucket-codeowners-<ver>.jar      -> Bitbucket 10.x / Java 21 (default)
+#   - bitbucket-codeowners-<ver>-bb9.jar  -> Bitbucket 9.x  LTS / Java 17 (-Pbb9)
 on:
   push:
     tags: ['v*']
@@ -13,7 +15,7 @@ permissions:
 
 jobs:
   release:
-    name: Build & publish artifact
+    name: Build & publish artifacts
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -25,15 +27,33 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Build plugin
+      - name: Resolve project version
+        id: ver
+        run: echo "version=$(grep -m1 '<version>' pom.xml | sed -E 's/.*<version>([^<]+)<.*/\1/')" >> "$GITHUB_OUTPUT"
+
+      - name: Build default artifact (Bitbucket 10.x / Java 21)
         run: mvn -B -ntp clean package
 
-      - name: List build output
-        run: ls -la target/*.jar
+      - name: Stage default artifact
+        run: |
+          mkdir -p dist
+          cp "target/bitbucket-codeowners-${{ steps.ver.outputs.version }}.jar" \
+             "dist/bitbucket-codeowners-${{ steps.ver.outputs.version }}.jar"
 
-      - name: Create release and attach artifact
+      - name: Build bb9 artifact (Bitbucket 9.x LTS / Java 17)
+        run: mvn -B -ntp -Pbb9 clean package
+
+      - name: Stage bb9 artifact
+        run: |
+          cp "target/bitbucket-codeowners-${{ steps.ver.outputs.version }}.jar" \
+             "dist/bitbucket-codeowners-${{ steps.ver.outputs.version }}-bb9.jar"
+
+      - name: List artifacts
+        run: ls -la dist/*.jar
+
+      - name: Create release and attach artifacts
         uses: softprops/action-gh-release@v2
         with:
-          files: target/*.jar
+          files: dist/*.jar
           generate_release_notes: true
           fail_on_unmatched_files: true
