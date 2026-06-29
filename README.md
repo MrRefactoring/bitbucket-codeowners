@@ -1,5 +1,10 @@
 # Bitbucket Code Owners
 
+[![CI](https://github.com/MrRefactoring/bitbucket-codeowners/actions/workflows/ci.yml/badge.svg)](https://github.com/MrRefactoring/bitbucket-codeowners/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/MrRefactoring/bitbucket-codeowners?sort=semver)](https://github.com/MrRefactoring/bitbucket-codeowners/releases/latest)
+[![License: MIT](https://img.shields.io/github/license/MrRefactoring/bitbucket-codeowners)](./LICENSE)
+![Bitbucket DC](https://img.shields.io/badge/Bitbucket%20DC-9.x%20%7C%2010.x-0052CC?logo=bitbucket&logoColor=white)
+
 A self-hosted, open-source **Bitbucket Data Center** app that enforces **path-based code
 ownership with subgroup approval thresholds** — the piece that native Code Owners and native
 merge checks can't do on their own.
