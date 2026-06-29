@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-06-29
+
+### Changed
+- Each release now publishes a ready-to-install **Bitbucket 9.x LTS** artifact
+  (`bitbucket-codeowners-<version>-bb9.jar`, Java 17) alongside the default 10.x / Java 21 jar, so
+  9.x operators no longer need a local `-Pbb9` build. No change to the plugin code: the two jars are
+  the same source built for different platform lines.
+
 ### Removed
 - Dropped the no-op `version` field from the configuration schema docs and examples. The parser
   never read it; existing files that still include it keep working (unknown top-level keys are
@@ -39,6 +47,7 @@ Initial release.
 - GitHub Actions: CI build/test on every push & PR; a `v*` tag builds the plugin and attaches the
   `.jar` to the GitHub Release.
 
-[Unreleased]: https://github.com/MrRefactoring/bitbucket-codeowners/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/MrRefactoring/bitbucket-codeowners/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/MrRefactoring/bitbucket-codeowners/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/MrRefactoring/bitbucket-codeowners/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/MrRefactoring/bitbucket-codeowners/releases/tag/v0.1.0
